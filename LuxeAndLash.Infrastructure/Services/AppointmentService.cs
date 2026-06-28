@@ -25,8 +25,9 @@ public class AppointmentService : IAppointmentService
         if (service == null)
             return Result<AppointmentResponseDto>.Failure("Service not found.");
 
+        var conflictDateTime = DateTime.SpecifyKind(dto.DateTime, DateTimeKind.Utc);
         var conflict = await _context.Appointments
-            .AnyAsync(a => a.DateTime == dto.DateTime &&
+            .AnyAsync(a => a.DateTime == conflictDateTime &&
                            a.Status != AppointmentStatus.Rejected &&
                            a.Status != AppointmentStatus.Cancelled);
         if (conflict)
@@ -36,7 +37,7 @@ public class AppointmentService : IAppointmentService
         {
             UserId    = userId,
             ServiceId = dto.ServiceId,
-            DateTime  = dto.DateTime,
+            DateTime  = DateTime.SpecifyKind(dto.DateTime, DateTimeKind.Utc),
             Notes     = dto.Notes,
             Status    = AppointmentStatus.Pending
         };
@@ -47,7 +48,7 @@ public class AppointmentService : IAppointmentService
         var user = await _context.Users.FindAsync(userId);
 
         await _emailService.SendAppointmentReceivedAsync(
-            user!.Email!, user.FirstName, service.Name, dto.DateTime);
+            user!.Email!, user.FirstName, service.Name, appointment.DateTime);
 
         return Result<AppointmentResponseDto>.Success(MapToDto(appointment, service, user));
     }
@@ -145,15 +146,15 @@ public class AppointmentService : IAppointmentService
 
     private static AppointmentResponseDto MapToDto(Appointment a, Domain.Entities.Service s, User u) => new()
     {
-        Id           = a.Id,
-        ServiceName  = s.Name,
-        Price        = s.Price,
-        DateTime     = a.DateTime,
-        Status       = a.Status.ToString(),
-        Notes        = a.Notes,
-        AdminReason  = a.AdminReason,
-        ClientName   = $"{u.FirstName} {u.LastName}",
-        ClientEmail  = u.Email!,
-        CreatedAt    = a.CreatedAt
+        Id          = a.Id,
+        ServiceName = s.Name,
+        Price       = s.Price,
+        DateTime    = a.DateTime,
+        Status      = a.Status.ToString(),
+        Notes       = a.Notes,
+        AdminReason = a.AdminReason,
+        ClientName  = $"{u.FirstName} {u.LastName}",
+        ClientEmail = u.Email!,
+        CreatedAt   = a.CreatedAt
     };
 }
