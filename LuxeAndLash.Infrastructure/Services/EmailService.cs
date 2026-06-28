@@ -43,7 +43,7 @@ public class EmailService : IEmailService
     public async Task SendVerificationEmailAsync(string email, string firstName, string userId, string token)
     {
         var encodedToken = Uri.EscapeDataString(token);
-        var link = $"http://localhost:5000/api/auth/verify-email?userId={userId}&token={encodedToken}";
+        var link = $"http://localhost:5238/api/auth/verify-email?userId={userId}&token={encodedToken}";
         var html = $@"
             <h2>Welcome to Luxe & Lash, {firstName}!</h2>
             <p>Please verify your email address by clicking the button below:</p>
