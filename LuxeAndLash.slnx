@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="LuxeAndLash.API/LuxeAndLash.API.csproj" />
+  <Project Path="LuxeAndLash.Application/LuxeAndLash.Application.csproj" />
+  <Project Path="LuxeAndLash.Domain/LuxeAndLash.Domain.csproj" />
+  <Project Path="LuxeAndLash.Infrastructure/LuxeAndLash.Infrastructure.csproj" />
+</Solution>
