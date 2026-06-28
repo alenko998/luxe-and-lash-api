@@ -107,7 +107,7 @@ public class EmailService : IEmailService
     public async Task SendPasswordResetEmailAsync(string email, string firstName, string userId, string token)
     {
         var encodedToken = Uri.EscapeDataString(token);
-        var link = $"http://localhost:3000/reset-password?userId={userId}&token={encodedToken}";
+        var link = $"http://localhost:5173/reset-password?userId={userId}&token={encodedToken}";
         var html = $@"
             <h2>Hi {firstName}, reset your password</h2>
             <p>Click the button below to reset your password:</p>
